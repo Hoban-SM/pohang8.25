@@ -294,28 +294,52 @@ body {
   flex-wrap: wrap;
   gap: 8px;
 }
-.date-chip, .slot-chip {
+
+/* 방문 일자 선택: 5개씩 2줄 그리드 */
+.date-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+}
+.date-chip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: 12px 2px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: #fff;
+  cursor: pointer;
+  transition: transform .15s ease, box-shadow .15s ease, background-color .15s ease, border-color .15s ease;
+}
+.date-chip:hover { transform: translateY(-2px); box-shadow: 0 4px 10px rgba(44,35,32,0.08); }
+.date-chip-day { font-size: 15px; font-weight: 700; color: var(--ink); line-height: 1; }
+.date-chip-dow { font-size: 11px; color: var(--ink-soft); font-weight: 500; }
+.date-chip.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  box-shadow: 0 4px 14px rgba(190,106,69,0.35);
+}
+.date-chip.active .date-chip-day,
+.date-chip.active .date-chip-dow { color: #fff; }
+
+/* 방문 시간 선택 */
+.slot-grid { gap: 8px; }
+.slot-chip {
   padding: 10px 14px;
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: 10px;
   background: #fff;
   font-size: 13.5px;
   font-weight: 600;
   cursor: pointer;
   color: var(--ink);
-}
-.date-chip.active {
-  background: var(--primary);
-  border-color: var(--primary);
-  color: #fff;
-}
-.slot-grid { gap: 8px; }
-.slot-chip {
   display: flex;
   flex-direction: column;
   align-items: center;
   min-width: 78px;
-  border-radius: 10px;
   gap: 3px;
 }
 .slot-chip .slot-count {

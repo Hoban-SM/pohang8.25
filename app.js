@@ -20,12 +20,18 @@
     return (str || "").replace(/[^0-9]/g, "");
   }
 
-  function formatDateLabel(dateStr) {
+  const DOW_NAMES = ["일", "월", "화", "수", "목", "금", "토"];
+
+  function parseDate(dateStr) {
     // 문자열을 직접 파싱 + UTC 기준 요일 계산으로 브라우저 타임존에 영향받지 않도록 처리
     const [y, m, d] = dateStr.split("-").map(Number);
-    const days = ["일", "월", "화", "수", "목", "금", "토"];
     const dow = new Date(Date.UTC(y, m - 1, d)).getUTCDay();
-    return `${m}.${d}(${days[dow]})`;
+    return { y, m, d, dow, dowName: DOW_NAMES[dow] };
+  }
+
+  function formatDateLabel(dateStr) {
+    const { m, d, dowName } = parseDate(dateStr);
+    return `${m}.${d}(${dowName})`;
   }
 
   function isApiConfigured() {
@@ -75,6 +81,36 @@
       showToast("일시적인 오류가 발생했습니다. 잠시 후 다시 시도해주세요.", true);
     }
     console.error(err);
+  }
+
+  // ---------- 방문자 IP / 통계 (관리자용 로그) ----------
+  let clientIP = "";
+
+  async function fetchClientIP() {
+    try {
+      const res = await fetch("https://api.ipify.org?format=json");
+      if (!res.ok) return;
+      const data = await res.json();
+      clientIP = data.ip || "";
+    } catch (err) {
+      // IP 조회 실패는 핵심 기능에 영향 없어야 하므로 조용히 무시
+      clientIP = "";
+    }
+  }
+
+  async function logVisit() {
+    try {
+      if (!isApiConfigured()) return;
+      await apiPost({ action: "logVisit", ip: clientIP, page: location.pathname });
+    } catch (err) {
+      // 방문 로그는 부가 기능이므로 실패해도 사용자에게 알리지 않음
+      console.error(err);
+    }
+  }
+
+  async function initVisitTracking() {
+    await fetchClientIP();
+    logVisit();
   }
 
   // ---------- 탭 전환 ----------
@@ -131,7 +167,7 @@
       resultBox.classList.remove("show", "error");
 
       try {
-        const res = await apiGet({ action: "unitLookup", dong, ho, name, phone4 });
+        const res = await apiGet({ action: "unitLookup", dong, ho, name, phone4, ip: clientIP });
         if (res.ok && res.data) {
           lastVerifiedUnit = { dong, ho, name, phone4 };
           renderLookupResult(res.data, dong, ho);
@@ -187,10 +223,11 @@
     const wrap = $("#dateList");
     wrap.innerHTML = "";
     VISIT_DATES.forEach(date => {
+      const { m, d, dowName } = parseDate(date);
       const btn = document.createElement("button");
       btn.type = "button";
       btn.className = "date-chip";
-      btn.textContent = formatDateLabel(date);
+      btn.innerHTML = `<span class="date-chip-day">${m}.${d}</span><span class="date-chip-dow">${dowName}</span>`;
       btn.dataset.date = date;
       btn.addEventListener("click", () => selectDate(date, btn));
       wrap.appendChild(btn);
@@ -231,7 +268,7 @@
       btn.type = "button";
       btn.className = "slot-chip" + (full ? " full" : "");
       btn.disabled = full;
-      btn.innerHTML = `${time}<span class="slot-count">${full ? "마감" : `${count}/${CAPACITY_PER_SLOT}`}</span>`;
+      btn.innerHTML = `${time}<span class="slot-count">${full ? "예약마감" : "예약가능"}</span>`;
       btn.addEventListener("click", () => selectSlot(time, btn));
       wrap.appendChild(btn);
     });
@@ -276,7 +313,8 @@
         const res = await apiPost({
           action: "reserve",
           dong, ho, phone4, name, phone,
-          date: selectedDate, time: selectedTime
+          date: selectedDate, time: selectedTime,
+          ip: clientIP
         });
         if (res.ok) {
           showToast(`예약이 완료되었습니다! (예약번호: ${res.data.reservationId})`);
@@ -374,5 +412,6 @@
     initLookup();
     initReserveForm();
     initMyReservation();
+    initVisitTracking();
   });
 })();
