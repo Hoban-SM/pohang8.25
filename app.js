@@ -101,9 +101,7 @@
     $("#noticeContractPeriod").textContent = SITE_INFO.contractPeriod;
     $("#noticeContractTime").textContent = SITE_INFO.contractTime;
     $("#noticeContractPlace").textContent = SITE_INFO.contractPlace;
-    $("#noticeDate").textContent = SITE_INFO.noticeDate;
-    $("#noticeCompany").textContent = SITE_INFO.companyName;
-
+    
     const pdfLink = $("#noticePdfLink");
     if (pdfLink && typeof NOTICE_PDF_URL === "string") {
       pdfLink.href = NOTICE_PDF_URL;
