@@ -41,6 +41,13 @@
     return `${y}년 ${m}월 ${d}일, (${dowName}) ${timeStr}`;
   }
 
+  // 오늘 날짜를 한국시간(Asia/Seoul) 기준 "YYYY-MM-DD" 문자열로 반환.
+  // 방문객의 브라우저가 어느 시간대에 있든(해외 로밍 등) 항상 한국 기준으로 "오늘"을 판단하기 위함.
+  function todayKstStr() {
+    // en-CA 로케일은 YYYY-MM-DD 형식을 반환한다.
+    return new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Seoul" });
+  }
+
   function isApiConfigured() {
     return typeof GAS_API_URL === "string" &&
       GAS_API_URL.indexOf("http") === 0;
@@ -229,7 +236,17 @@
   function initReserveDates() {
     const wrap = $("#dateList");
     wrap.innerHTML = "";
-    VISIT_DATES.forEach(date => {
+    const today = todayKstStr();
+    // 오늘보다 이전 날짜는 목록에서 아예 제외 (지난 날짜는 방문할 수 없으므로).
+    // 오늘 날짜 자체는 계속 선택 가능하게 남겨둔다 (시간대별 마감 여부는 3단계에서 별도 처리됨).
+    const upcomingDates = VISIT_DATES.filter(date => date >= today);
+
+    if (upcomingDates.length === 0) {
+      wrap.innerHTML = `<p class="hint">예약 가능한 방문 일자가 모두 지났습니다.</p>`;
+      return;
+    }
+
+    upcomingDates.forEach(date => {
       const { m, d, dowName } = parseDate(date);
       const btn = document.createElement("button");
       btn.type = "button";
@@ -289,11 +306,29 @@
     $("#selectedDateTimeLabel").textContent = `${formatDateLabel(selectedDate)} ${selectedTime}`;
   }
 
+  let isSubmittingReservation = false; // 버튼 연타/중복 클릭으로 인한 이중 예약 방지용 잠금
+
+  function resetReserveSteps() {
+    $("#reserveDoneSection").style.display = "none";
+    $("#reserveSteps").style.display = "";
+    selectedDate = null; selectedTime = null;
+    $$(".date-chip", $("#dateList")).forEach(b => b.classList.remove("active"));
+    $("#slotSection").classList.remove("show");
+    $("#reserveDetailSection").classList.remove("show");
+    $("#reserveForm").reset();
+  }
+
   function initReserveForm() {
     initReserveDates();
     const form = $("#reserveForm");
+
+    const doneNewBtn = $("#reserveDoneNewBtn");
+    if (doneNewBtn) doneNewBtn.addEventListener("click", resetReserveSteps);
+
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
+      if (isSubmittingReservation) return; // 이미 처리 중인 요청이 있으면 무시 (중복 제출 방지)
+
       const dong = onlyDigits($("#resDong").value);
       const ho = onlyDigits($("#resHo").value);
       const name = $("#resName").value.trim();
@@ -314,7 +349,8 @@
       }
 
       const btn = $("#reserveSubmitBtn");
-      btn.disabled = true; btn.textContent = "예약 처리중...";
+      isSubmittingReservation = true;
+      btn.disabled = true; btn.textContent = "예약 처리중... (잠시만 기다려주세요)";
 
       try {
         const res = await apiPost({
@@ -325,11 +361,15 @@
         });
         if (res.ok) {
           showToast(`예약이 완료되었습니다! (예약번호: ${res.data.reservationId})`);
+          $("#reserveDoneId").textContent = res.data.reservationId;
+          $("#reserveSteps").style.display = "none";
+          $("#reserveDoneSection").style.display = "block";
           form.reset();
-          $("#reserveDetailSection").classList.remove("show");
           selectedDate = null; selectedTime = null;
           $$(".date-chip", $("#dateList")).forEach(b => b.classList.remove("active"));
           $("#slotSection").classList.remove("show");
+          $("#reserveDetailSection").classList.remove("show");
+          window.scrollTo({ top: 0, behavior: "smooth" });
         } else {
           showToast(res.message || "이미 마감되었거나 예약할 수 없는 시간입니다. 다른 시간을 선택해주세요.", true);
           // 정원마감 등의 사유일 수 있으므로 슬롯 갱신
@@ -338,6 +378,7 @@
       } catch (err) {
         handleApiError(err);
       } finally {
+        isSubmittingReservation = false;
         btn.disabled = false; btn.textContent = "예약 확정하기";
       }
     });

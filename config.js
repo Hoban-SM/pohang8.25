@@ -10,7 +10,7 @@
       (index.html과 같은 폴더에 PDF 파일을 함께 올려야 합니다)
    ========================================================= */
 
-const GAS_API_URL = "https://script.google.com/macros/library/d/1qA49dJkcJVqt1CC7KwdC4T53mSRbz6odC_iB9bWMgQC27m1BrvCqtuVc/12";
+const GAS_API_URL = "여기에_배포된_Apps_Script_웹앱_URL을_붙여넣으세요";
 
 // 안내문 PDF 파일 경로 (같은 폴더에 이 이름으로 PDF를 올려주세요)
 const NOTICE_PDF_URL = "안내문.pdf";

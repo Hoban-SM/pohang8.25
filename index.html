@@ -88,51 +88,60 @@
   <section id="tab-reserve" class="tab-panel">
     <h2 class="project-title">방문예약</h2>
 
-    <div class="card">
-      <h3>1. 세대 확인</h3>
-      <div class="form-row-group">
-        <div class="form-row">
-          <label for="resDong">동</label>
-          <input type="text" id="resDong" inputmode="numeric" placeholder="예: 101" maxlength="4" required />
-        </div>
-        <div class="form-row">
-          <label for="resHo">호</label>
-          <input type="text" id="resHo" inputmode="numeric" placeholder="예: 1201" maxlength="5" required />
-        </div>
-        <div class="form-row">
-          <label for="resName">계약자 성명</label>
-          <input type="text" id="resName" placeholder="홍길동" required />
-        </div>
-        <div class="form-row">
-          <label for="resPhone4">휴대폰 뒷자리 4자리</label>
-          <input type="text" id="resPhone4" inputmode="numeric" placeholder="0000" maxlength="4" required />
+    <div id="reserveSteps">
+      <div class="card">
+        <h3>1. 세대 확인</h3>
+        <div class="form-row-group">
+          <div class="form-row">
+            <label for="resDong">동</label>
+            <input type="text" id="resDong" inputmode="numeric" placeholder="예: 101" maxlength="4" required />
+          </div>
+          <div class="form-row">
+            <label for="resHo">호</label>
+            <input type="text" id="resHo" inputmode="numeric" placeholder="예: 1201" maxlength="5" required />
+          </div>
+          <div class="form-row">
+            <label for="resName">계약자 성명</label>
+            <input type="text" id="resName" placeholder="홍길동" required />
+          </div>
+          <div class="form-row">
+            <label for="resPhone4">휴대폰 뒷자리 4자리</label>
+            <input type="text" id="resPhone4" inputmode="numeric" placeholder="0000" maxlength="4" required />
+          </div>
         </div>
       </div>
-    </div>
 
-    <div class="card">
-      <h3>2. 방문 일자 선택</h3>
-      <div id="dateList" class="chip-list date-grid"></div>
-    </div>
-
-    <div id="slotSection" class="card">
-      <h3>3. 방문 시간 선택</h3>
-      <div id="slotList" class="chip-list slot-grid"></div>
-    </div>
-
-    <form id="reserveForm">
-      <div id="reserveDetailSection" class="card">
-        <h3>4. 예약자 정보</h3>
-        <p class="selected-label">선택하신 일시: <strong id="selectedDateTimeLabel"></strong></p>
-        <div class="form-row">
-          <label for="resPhoneFull">연락처(전체 번호) *</label>
-          <input type="tel" id="resPhoneFull" inputmode="numeric" placeholder="01012345678" required />
-          <p class="field-hint">＊ 하이픈(-) 없이 숫자만 입력해주세요. 예) 01012345678</p>
-        </div>
-        <button type="submit" id="reserveSubmitBtn" class="btn primary block">예약 확정하기</button>
-        <p class="hint">※ 본 예약은 매매예약 계약 당사자(임차인) 확인용이며, 대리인 방문 시 안내문의 구비서류를 반드시 지참해주세요.</p>
+      <div class="card">
+        <h3>2. 방문 일자 선택</h3>
+        <div id="dateList" class="chip-list date-grid"></div>
       </div>
-    </form>
+
+      <div id="slotSection" class="card">
+        <h3>3. 방문 시간 선택</h3>
+        <div id="slotList" class="chip-list slot-grid"></div>
+      </div>
+
+      <form id="reserveForm">
+        <div id="reserveDetailSection" class="card">
+          <h3>4. 예약자 정보</h3>
+          <p class="selected-label">선택하신 일시: <strong id="selectedDateTimeLabel"></strong></p>
+          <div class="form-row">
+            <label for="resPhoneFull">연락처(전체 번호) *</label>
+            <input type="tel" id="resPhoneFull" inputmode="numeric" placeholder="01012345678" required />
+            <p class="field-hint">＊ 하이픈(-) 없이 숫자만 입력해주세요. 예) 01012345678</p>
+          </div>
+          <button type="submit" id="reserveSubmitBtn" class="btn primary block">예약 확정하기</button>
+          <p class="hint">※ 본 예약은 매매예약 계약 당사자(임차인) 확인용이며, 대리인 방문 시 안내문의 구비서류를 반드시 지참해주세요. 버튼을 누른 뒤에는 아래 완료 화면이 뜰 때까지 다시 누르지 말고 잠시 기다려주세요.</p>
+        </div>
+      </form>
+    </div>
+
+    <div id="reserveDoneSection" class="card" style="display:none;">
+      <h3>예약이 완료되었습니다 ✅</h3>
+      <p class="selected-label">예약번호: <strong id="reserveDoneId"></strong></p>
+      <p class="hint">예약 내역 확인·취소는 "예약조회·취소" 탭에서 하실 수 있습니다. 세대당 예약은 한 번에 1건만 가능하니, 일정을 바꾸시려면 기존 예약을 먼저 취소한 뒤 다시 예약해주세요.</p>
+      <button type="button" id="reserveDoneNewBtn" class="btn primary block">다른 일정으로 새로 예약하기</button>
+    </div>
   </section>
 
   <!-- ============ 예약조회/취소 탭 ============ -->
