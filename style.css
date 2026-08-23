@@ -20,7 +20,7 @@
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", sans-serif;
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", sans-serif;
   background: var(--bg);
   color: var(--ink);
   line-height: 1.55;
@@ -130,9 +130,15 @@ body {
   width: 96px;
   background: var(--primary-light);
   color: var(--primary-dark);
-  letter-spacing: 1px;
+  font-weight: 700;
   white-space: nowrap;
+  vertical-align: middle;
+  text-align: justify;
+  text-align-last: justify;
+  text-justify: inter-character;
+  padding-right: 14px;
 }
+.summary-card .info-table td { vertical-align: middle; }
 .btn.pdf-link {
   display: flex;
   align-items: center;
