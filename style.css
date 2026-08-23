@@ -256,6 +256,53 @@ body {
   color: var(--ink-soft);
   margin: 6px 0 0;
 }
+
+/* 개인정보수집동의 */
+.privacy-consent { margin: 20px 0 16px; }
+.privacy-consent h4 {
+  font-size: 14px;
+  margin: 0 0 8px;
+  color: var(--ink);
+}
+.privacy-consent-box {
+  max-height: 160px;
+  overflow-y: auto;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #FAFAFA;
+  padding: 12px 14px;
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+.privacy-consent-question {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 10px;
+  font-size: 13px;
+  color: var(--ink);
+}
+.privacy-consent-options {
+  display: flex;
+  gap: 16px;
+}
+.privacy-consent-options label {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.privacy-consent-options input[type="radio"] {
+  accent-color: var(--primary);
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+}
 .form-row-group {
   display: grid;
   grid-template-columns: 1fr 1fr;

@@ -347,6 +347,11 @@
         showToast("연락처를 정확히 입력해주세요.", true);
         return;
       }
+      const privacyAgreed = $("#privacyAgree").checked;
+      if (!privacyAgreed) {
+        showToast("개인정보 수집 및 이용에 동의하셔야 예약이 가능합니다.", true);
+        return;
+      }
 
       const btn = $("#reserveSubmitBtn");
       isSubmittingReservation = true;
