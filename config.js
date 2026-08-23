@@ -12,6 +12,7 @@
 
 const GAS_API_URL = "https://script.google.com/macros/s/AKfycbywgNLo67sL2hATIbySiI5Pm03XtdkqJ7d81J_L1np2JE7d_lDxbo7Ap7cyIe_w57RC_w/exec";
 
+
 // 안내문 PDF 파일 경로 (같은 폴더에 이 이름으로 PDF를 올려주세요)
 const NOTICE_PDF_URL = "안내문.pdf";
 
