@@ -10,8 +10,7 @@
       (index.html과 같은 폴더에 PDF 파일을 함께 올려야 합니다)
    ========================================================= */
 
-const GAS_API_URL = "https://script.google.com/macros/s/AKfycbywgNLo67sL2hATIbySiI5Pm03XtdkqJ7d81J_L1np2JE7d_lDxbo7Ap7cyIe_w57RC_w/exec
-";
+const GAS_API_URL = "여기에_배포된_Apps_Script_웹앱_URL을_붙여넣으세요";
 
 // 안내문 PDF 파일 경로 (같은 폴더에 이 이름으로 PDF를 올려주세요)
 const NOTICE_PDF_URL = "안내문.pdf";
@@ -19,7 +18,7 @@ const NOTICE_PDF_URL = "안내문.pdf";
 // 단지 정보 (안내문 탭 및 화면 타이틀에 사용)
 const SITE_INFO = {
   pageTitle: "포항초곡 호반써밋 방문예약",
-  target: "포항초곡 호반써밋 매매예약 계약체결",
+  target: "거주임차인",
   resMethod: "홈페이지 온라인 예약 (동일 세대 중복예약 불가)",
   contractPeriod: "2026. 9. 7.(월) ~ 9. 18.(금) (9.12 제외)",
   contractTime: "09:30 ~ 16:00 (점심시간 12:00~13:00 제외)",
