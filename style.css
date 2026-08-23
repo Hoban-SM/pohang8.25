@@ -300,10 +300,13 @@ body {
   gap: 8px;
 }
 
-/* 방문 일자 선택: 5개씩 2줄 그리드 */
+/* 방문 일자 선택: 화면 폭에 따라 한 줄에 들어가는 개수가 자동으로 조정되는 그리드.
+   일반적인 모바일 화면(375~430px 폭)에서는 칩 하나당 최소 78px을 확보하는 선에서
+   자동으로 4개씩 배치되고(11일 기준 4·4·3 = 3줄), 화면이 넓어지면(태블릿/데스크톱)
+   한 줄에 더 많이 들어가도록 자동으로 늘어난다. */
 .date-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(66px, 1fr));
   gap: 8px;
 }
 .date-chip {
