@@ -8,7 +8,8 @@
       쪽 설정과 반드시 동일하게 맞춰주세요. (여기 값은 화면 표시용)
    ========================================================= */
 
-const GAS_API_URL = "여기에_배포된_Apps_Script_웹앱_URL을_붙여넣으세요";
+const GAS_API_URL = "https://script.google.com/macros/s/AKfycbywgNLo67sL2hATIbySiI5Pm03XtdkqJ7d81J_L1np2JE7d_lDxbo7Ap7cyIe_w57RC_w/exec
+";
 
 // 단지 정보 (안내문 탭 및 화면 타이틀에 사용)
 const SITE_INFO = {
