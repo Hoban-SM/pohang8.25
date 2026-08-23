@@ -9,11 +9,13 @@
   const $ = (sel, root) => (root || document).querySelector(sel);
   const $$ = (sel, root) => Array.from((root || document).querySelectorAll(sel));
 
+  // 세대정보 시트의 금액은 "천원" 단위로 입력되어 있으므로(예: 263000 = 2억6300만원)
+  // 화면에는 1,000을 곱해 "원" 단위 실제 금액으로 환산해서 보여준다.
   function won(n) {
     if (n === null || n === undefined || n === "") return "-";
     const num = Number(n);
     if (Number.isNaN(num)) return String(n);
-    return num.toLocaleString("ko-KR") + "천원";
+    return (num * 1000).toLocaleString("ko-KR") + "원";
   }
 
   function onlyDigits(str) {
@@ -32,6 +34,11 @@
   function formatDateLabel(dateStr) {
     const { m, d, dowName } = parseDate(dateStr);
     return `${m}.${d}(${dowName})`;
+  }
+
+  function formatDateTimeFull(dateStr, timeStr) {
+    const { y, m, d, dowName } = parseDate(dateStr);
+    return `${y}년 ${m}월 ${d}일, (${dowName}) ${timeStr}`;
   }
 
   function isApiConfigured() {
@@ -372,7 +379,7 @@
     wrap.innerHTML = list.map(r => `
       <div class="res-card ${r.status === "취소" ? "cancelled" : ""}">
         <div class="res-card-row">
-          <strong>${formatDateLabel(r.date)} ${r.time}</strong>
+          <strong>${formatDateTimeFull(r.date, r.time)}</strong>
           <span class="status ${r.status === "취소" ? "status-cancel" : "status-ok"}">${r.status}</span>
         </div>
         <div class="res-card-row muted">예약번호 ${r.reservationId} · ${r.name}</div>
