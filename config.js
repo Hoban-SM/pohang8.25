@@ -6,23 +6,26 @@
       예) const GAS_API_URL = "https://script.google.com/macros/s/AKfycb.../exec";
    2) 방문 가능 일자 / 시간대 / 슬롯당 정원은 Apps Script(Code.gs)
       쪽 설정과 반드시 동일하게 맞춰주세요. (여기 값은 화면 표시용)
+   3) 안내문 PDF 파일명이 다르면 NOTICE_PDF_URL 값을 바꿔주세요.
+      (index.html과 같은 폴더에 PDF 파일을 함께 올려야 합니다)
    ========================================================= */
 
-const GAS_API_URL = "https://script.google.com/macros/s/AKfycbywgNLo67sL2hATIbySiI5Pm03XtdkqJ7d81J_L1np2JE7d_lDxbo7Ap7cyIe_w57RC_w/exec";
+const GAS_API_URL = "여기에_배포된_Apps_Script_웹앱_URL을_붙여넣으세요";
+
+// 안내문 PDF 파일 경로 (같은 폴더에 이 이름으로 PDF를 올려주세요)
+const NOTICE_PDF_URL = "안내문.pdf";
 
 // 단지 정보 (안내문 탭 및 화면 타이틀에 사용)
 const SITE_INFO = {
-  projectName: "포항초곡 호반써밋",
-  pageTitle: "포항초곡 호반써밋 매매예약 방문예약",
+  pageTitle: "포항초곡 호반써밋 방문예약",
+  target: "포항초곡 호반써밋 매매예약 계약체결",
+  resMethod: "홈페이지 온라인 예약 (동일 세대 중복예약 불가)",
   contractPeriod: "2026. 9. 7.(월) ~ 9. 18.(금) (9.12 제외)",
   contractTime: "09:30 ~ 16:00 (점심시간 12:00~13:00 제외)",
   contractPlace: "단지내 커뮤니티 임대사업소 (지하1층)",
   reservationPeriod: "2026. 8. 25.(화) ~ 9. 18.(금)",
   officeTel: "054-612-3832",
   companyName: "㈜호반건설",
-  bankName: "우리은행",
-  bankAccountNote: "세대별 가상계좌 (반드시 동호수로 입금)",
-  bankHolder: "㈜호반건설",
   noticeDate: "2026년 8월 25일"
 };
 
@@ -40,27 +43,3 @@ const TIME_SLOTS = [
 
 // 시간대(슬롯)당 최대 예약 인원(팀 수)
 const CAPACITY_PER_SLOT = 2;
-
-// 예시 매매예약 납부조건 (안내문 상 "기준층 기준" 예시표, 실제 금액은 동호조회에서 개별확인)
-const SAMPLE_PRICE_TABLE = [
-  { type: "59A", sale: 196000, deposit: 118737, downAtContract: 10000, downAt3M: 10000, balance: 57263, subtotal: 77263 },
-  { type: "84A", sale: 263000, deposit: 145480, downAtContract: 15000, downAt3M: 15000, balance: 87520, subtotal: 117520 },
-  { type: "106", sale: 344000, deposit: 174363, downAtContract: 20000, downAt3M: 20000, balance: 129637, subtotal: 169637 }
-];
-
-// 구비서류 안내
-const REQUIRED_DOCS = {
-  common: [
-    "계약자 주민등록등본 1부",
-    "계약자 인감증명서(본인발급) 1부 또는 본인서명사실확인서 1부 (반드시 본인 방문 必, 대리인 방문 불가)",
-    "인감도장",
-    "신분증",
-    "임대차계약서(확인용)",
-    "※ 2026년 8월 1일 이후 발급 서류 제출 / 계약자 = 매매예약 당사자(임차인)"
-  ],
-  agent: [
-    "계약자 인감증명서(본인발급) 1부",
-    "대리인 신분증 1부",
-    "가족관계증명서 1부"
-  ]
-};

@@ -70,7 +70,7 @@
 
   function handleApiError(err) {
     if (err && err.message === "CONFIG_MISSING") {
-      showToast("관리자 설정이 완료되지 않았습니다. (js/config.js 의 GAS_API_URL을 확인해주세요)", true);
+      showToast("관리자 설정이 완료되지 않았습니다. (config.js 의 GAS_API_URL을 확인해주세요)", true);
     } else {
       showToast("일시적인 오류가 발생했습니다. 잠시 후 다시 시도해주세요.", true);
     }
@@ -94,41 +94,24 @@
 
   // ---------- 안내문 탭 렌더 ----------
   function renderNotice() {
-    $("#noticeProjectName").textContent = SITE_INFO.projectName;
     $("#pageTitle").textContent = SITE_INFO.pageTitle;
+    $("#noticeTarget").textContent = SITE_INFO.target;
+    $("#noticeResMethod").textContent = SITE_INFO.resMethod;
+    $("#noticeReservationPeriod").textContent = SITE_INFO.reservationPeriod;
     $("#noticeContractPeriod").textContent = SITE_INFO.contractPeriod;
     $("#noticeContractTime").textContent = SITE_INFO.contractTime;
     $("#noticeContractPlace").textContent = SITE_INFO.contractPlace;
-    $("#noticeReservationPeriod").textContent = SITE_INFO.reservationPeriod;
-    $("#noticeTel").textContent = SITE_INFO.officeTel;
-    $("#noticeBank").textContent = `${SITE_INFO.bankName} / ${SITE_INFO.bankAccountNote} / 예금주 ${SITE_INFO.bankHolder}`;
     $("#noticeDate").textContent = SITE_INFO.noticeDate;
     $("#noticeCompany").textContent = SITE_INFO.companyName;
 
-    const tbody = $("#priceTableBody");
-    tbody.innerHTML = "";
-    SAMPLE_PRICE_TABLE.forEach(row => {
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td>${row.type}</td>
-        <td>${won(row.sale)}</td>
-        <td>${won(row.deposit)}</td>
-        <td>${won(row.downAtContract)}</td>
-        <td>${won(row.downAt3M)}</td>
-        <td>${won(row.balance)}</td>
-        <td>${won(row.subtotal)}</td>
-      `;
-      tbody.appendChild(tr);
-    });
-
-    const commonUl = $("#docsCommon");
-    commonUl.innerHTML = REQUIRED_DOCS.common.map(d => `<li>${d}</li>`).join("");
-    const agentUl = $("#docsAgent");
-    agentUl.innerHTML = REQUIRED_DOCS.agent.map(d => `<li>${d}</li>`).join("");
+    const pdfLink = $("#noticePdfLink");
+    if (pdfLink && typeof NOTICE_PDF_URL === "string") {
+      pdfLink.href = NOTICE_PDF_URL;
+    }
   }
 
-  // ---------- 동호 조회 (분양금액 확인) ----------
-  let lastVerifiedUnit = null; // { dong, ho, phone4 } 방문예약 탭에서 재사용
+  // ---------- 분양금액 확인 ----------
+  let lastVerifiedUnit = null; // { dong, ho, name, phone4 } 방문예약 탭에서 재사용
 
   function initLookup() {
     const form = $("#lookupForm");
@@ -136,10 +119,11 @@
       e.preventDefault();
       const dong = onlyDigits($("#lookupDong").value);
       const ho = onlyDigits($("#lookupHo").value);
+      const name = $("#lookupName").value.trim();
       const phone4 = onlyDigits($("#lookupPhone4").value);
 
-      if (!dong || !ho || phone4.length !== 4) {
-        showToast("동, 호, 휴대폰 뒷자리 4자리를 정확히 입력해주세요.", true);
+      if (!dong || !ho || !name || phone4.length !== 4) {
+        showToast("동, 호, 계약자 성명, 휴대폰 뒷자리 4자리를 정확히 입력해주세요.", true);
         return;
       }
 
@@ -149,16 +133,16 @@
       resultBox.classList.remove("show", "error");
 
       try {
-        const res = await apiGet({ action: "unitLookup", dong, ho, phone4 });
+        const res = await apiGet({ action: "unitLookup", dong, ho, name, phone4 });
         if (res.ok && res.data) {
-          lastVerifiedUnit = { dong, ho, phone4 };
+          lastVerifiedUnit = { dong, ho, name, phone4 };
           renderLookupResult(res.data, dong, ho);
           resultBox.classList.add("show");
           // 방문예약 탭 상단의 확인정보도 자동 채움
-          fillReservationIdentity(dong, ho, phone4);
+          fillReservationIdentity(dong, ho, name, phone4);
         } else {
           resultBox.classList.add("show", "error");
-          resultBox.innerHTML = `<p class="error-msg">일치하는 정보를 찾을 수 없습니다. 동/호/휴대폰 뒷자리를 다시 확인해주세요.</p>`;
+          resultBox.innerHTML = `<p class="error-msg">일치하는 정보를 찾을 수 없습니다. 동/호/성명/휴대폰 뒷자리를 다시 확인해주세요.</p>`;
         }
       } catch (err) {
         handleApiError(err);
@@ -194,9 +178,10 @@
   let selectedDate = null;
   let selectedTime = null;
 
-  function fillReservationIdentity(dong, ho, phone4) {
+  function fillReservationIdentity(dong, ho, name, phone4) {
     $("#resDong").value = dong;
     $("#resHo").value = ho;
+    $("#resName").value = name;
     $("#resPhone4").value = phone4;
   }
 
@@ -269,20 +254,16 @@
       e.preventDefault();
       const dong = onlyDigits($("#resDong").value);
       const ho = onlyDigits($("#resHo").value);
-      const phone4 = onlyDigits($("#resPhone4").value);
       const name = $("#resName").value.trim();
+      const phone4 = onlyDigits($("#resPhone4").value);
       const phone = onlyDigits($("#resPhoneFull").value);
 
-      if (!dong || !ho || phone4.length !== 4) {
-        showToast("동/호/휴대폰 뒷자리 4자리를 입력해주세요. (동호조회 탭에서 먼저 확인 가능)", true);
+      if (!dong || !ho || !name || phone4.length !== 4) {
+        showToast("동, 호, 계약자 성명, 휴대폰 뒷자리 4자리를 입력해주세요. (분양금액 확인 탭에서 먼저 확인 가능)", true);
         return;
       }
       if (!selectedDate || !selectedTime) {
         showToast("방문 일자와 시간을 선택해주세요.", true);
-        return;
-      }
-      if (!name) {
-        showToast("계약자(방문자) 성명을 입력해주세요.", true);
         return;
       }
       if (phone.length < 10) {
@@ -326,16 +307,17 @@
       e.preventDefault();
       const dong = onlyDigits($("#myDong").value);
       const ho = onlyDigits($("#myHo").value);
+      const name = $("#myName").value.trim();
       const phone4 = onlyDigits($("#myPhone4").value);
-      if (!dong || !ho || phone4.length !== 4) {
-        showToast("동, 호, 휴대폰 뒷자리 4자리를 정확히 입력해주세요.", true);
+      if (!dong || !ho || !name || phone4.length !== 4) {
+        showToast("동, 호, 계약자 성명, 휴대폰 뒷자리 4자리를 정확히 입력해주세요.", true);
         return;
       }
       const btn = $("#myResSubmitBtn");
       btn.disabled = true; btn.textContent = "조회중...";
       try {
-        const res = await apiGet({ action: "myReservations", dong, ho, phone4 });
-        renderMyReservations(res.ok ? res.data : [], { dong, ho, phone4 });
+        const res = await apiGet({ action: "myReservations", dong, ho, name, phone4 });
+        renderMyReservations(res.ok ? res.data : [], { dong, ho, name, phone4 });
       } catch (err) {
         handleApiError(err);
       } finally {

@@ -3,16 +3,16 @@
    ========================================================= */
 
 :root {
-  --primary: #E65917;
-  --primary-dark: #C7480F;
-  --primary-light: #FFF1E8;
-  --ink: #222222;
-  --ink-soft: #5B5B5B;
-  --border: #E5E1DC;
-  --bg: #FAF9F7;
+  --primary: #BE6A45;
+  --primary-dark: #9C5334;
+  --primary-light: #F5E4D9;
+  --ink: #2C2320;
+  --ink-soft: #7A6B62;
+  --border: #E9DDD3;
+  --bg: #FBF7F3;
   --card-bg: #FFFFFF;
-  --danger: #D64545;
-  --ok: #2E8B57;
+  --danger: #C0463A;
+  --ok: #3B7A57;
   --radius: 12px;
 }
 
@@ -115,6 +115,38 @@ body {
   color: var(--primary);
   margin: 0 0 10px;
 }
+
+/* 안내문 탭: 요약 카드 + PDF 링크 버튼 */
+#tab-notice { text-align: center; }
+#tab-notice .section-lead { font-size: 13px; letter-spacing: 1px; }
+#tab-notice .project-title { font-size: 26px; margin-bottom: 18px; }
+.summary-card { text-align: left; padding: 0; overflow: hidden; }
+.summary-card .info-table { margin: 0; }
+.summary-card .info-table th,
+.summary-card .info-table td { border: none; border-bottom: 1px solid var(--border); }
+.summary-card .info-table tr:last-child th,
+.summary-card .info-table tr:last-child td { border-bottom: none; }
+.summary-card .info-table th {
+  width: 96px;
+  background: var(--primary-light);
+  color: var(--primary-dark);
+  letter-spacing: 1px;
+  white-space: nowrap;
+}
+.btn.pdf-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: var(--primary);
+  color: #fff;
+  width: 100%;
+  margin-bottom: 16px;
+  text-decoration: none;
+}
+.btn.pdf-link:hover { background: var(--primary-dark); }
+.btn.pdf-link .arrow { font-size: 17px; line-height: 1; }
+.hint.center { text-align: center; }
 .section-desc {
   color: var(--ink-soft);
   font-size: 14px;
@@ -215,12 +247,8 @@ body {
 }
 .form-row-group {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 10px;
-}
-@media (max-width: 480px) {
-  .form-row-group { grid-template-columns: 1fr 1fr; }
-  .form-row-group .form-row:last-child { grid-column: span 2; }
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 12px;
 }
 
 .btn {

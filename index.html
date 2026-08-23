@@ -21,7 +21,7 @@
 
 <nav class="tab-nav">
   <button class="tab-btn active" data-tab="tab-notice">안내문</button>
-  <button class="tab-btn" data-tab="tab-lookup">동호 조회</button>
+  <button class="tab-btn" data-tab="tab-lookup">분양금액 확인</button>
   <button class="tab-btn" data-tab="tab-reserve">방문예약</button>
   <button class="tab-btn" data-tab="tab-mypage">예약조회·취소</button>
 </nav>
@@ -30,56 +30,28 @@
 
   <!-- ============ 안내문 탭 ============ -->
   <section id="tab-notice" class="tab-panel active">
-    <h2 id="noticeProjectName" class="project-title">포항초곡 호반써밋</h2>
-    <p class="section-lead">매매예약 계약 체결 안내</p>
-    <p class="section-desc">고객님의 가정에 건강과 행운이 함께 하시길 기원하며, 매매예약 관련 세부사항을 안내드리오니 계약체결에 차질 없도록 준비하여 주시기 바랍니다.</p>
+    <p class="section-lead">매매예약 계약체결</p>
+    <h2 class="project-title">방문예약</h2>
 
-    <div class="card">
-      <h3>1. 계약기간 및 장소</h3>
+    <div class="card summary-card">
       <table class="info-table">
         <tbody>
-          <tr><th>일자</th><td id="noticeContractPeriod"></td></tr>
-          <tr><th>시간</th><td id="noticeContractTime"></td></tr>
-          <tr><th>장소</th><td id="noticeContractPlace"></td></tr>
-          <tr><th>방문예약</th><td>본 사이트에서 선착순 방문예약 (예약기간 <span id="noticeReservationPeriod"></span>)</td></tr>
+          <tr><th>대&nbsp;&nbsp;&nbsp;&nbsp;상</th><td id="noticeTarget"></td></tr>
+          <tr><th>예 약 방 법</th><td id="noticeResMethod"></td></tr>
+          <tr><th>예 약 기 간</th><td id="noticeReservationPeriod"></td></tr>
+          <tr><th>방 문 기 간</th><td id="noticeContractPeriod"></td></tr>
+          <tr><th>방 문 시 간</th><td id="noticeContractTime"></td></tr>
+          <tr><th>방 문 장 소</th><td id="noticeContractPlace"></td></tr>
         </tbody>
       </table>
     </div>
 
-    <div class="card">
-      <h3>2. 매매예약 납부 조건 <span class="muted small">(예시 · 기준층 기준, 단위: 천원)</span></h3>
-      <div class="table-scroll">
-        <table class="price-table">
-          <thead>
-            <tr>
-              <th>구분</th><th>매매금액</th><th>임대보증금</th>
-              <th>계약금(계약시)</th><th>계약금(계약+3月)</th><th>잔금</th><th>소계</th>
-            </tr>
-          </thead>
-          <tbody id="priceTableBody"></tbody>
-        </table>
-      </div>
-      <p class="hint">＊ 잔금은 2027년 12월 예정이며, 세대별 매매금액 및 임대보증금은 <strong>동호 조회</strong> 탭에서 개별 확인하시기 바랍니다.</p>
-    </div>
+    <a id="noticePdfLink" class="btn pdf-link" href="안내문.pdf" target="_blank" rel="noopener">
+      매매예약 안내문 바로가기 <span class="arrow">›</span>
+    </a>
 
-    <div class="card">
-      <h3>납부계좌</h3>
-      <p id="noticeBank"></p>
-      <p class="hint">※ 당사는 어떠한 경우에도 절대 현금 수납을 받지 않습니다. 반드시 지정납부계좌로 입금하시기 바라며, 그 외의 방법은 매매대금의 정당한 납부로 인정되지 않습니다.</p>
-    </div>
-
-    <div class="card">
-      <h3>3. 구비서류</h3>
-      <p class="sub-heading">공통(필수)</p>
-      <ul id="docsCommon" class="doc-list"></ul>
-      <p class="sub-heading">대리인 계약시(추가)</p>
-      <ul id="docsAgent" class="doc-list"></ul>
-    </div>
-
-    <div class="card">
-      <h3>문의</h3>
-      <p>임대사업소 ☎ <a id="noticeTelLink" href="#"><span id="noticeTel"></span></a></p>
-    </div>
+    <p class="hint center">＊ 매매예약 납부조건(예시), 구비서류, 납부계좌 등 자세한 내용은 위 안내문 PDF를 확인해주세요.<br />
+      세대별 정확한 매매금액은 <strong>분양금액 확인</strong> 탭에서 개별 확인하실 수 있습니다.</p>
 
     <p class="notice-footer">
       <span id="noticeDate"></span><br />
@@ -87,10 +59,10 @@
     </p>
   </section>
 
-  <!-- ============ 동호 조회 탭 ============ -->
+  <!-- ============ 분양금액 확인 탭 ============ -->
   <section id="tab-lookup" class="tab-panel">
-    <h2 class="project-title">동호 조회 · 분양금액 확인</h2>
-    <p class="section-desc">동, 호수와 휴대폰번호 뒷자리 4자리를 입력하시면 세대별 매매금액을 확인하실 수 있습니다.</p>
+    <h2 class="project-title">분양금액 확인</h2>
+    <p class="section-desc">동, 호, 계약자 성명과 휴대폰번호 뒷자리 4자리를 입력하시면 세대별 매매금액을 확인하실 수 있습니다.</p>
 
     <form id="lookupForm" class="card form-card">
       <div class="form-row">
@@ -100,6 +72,10 @@
       <div class="form-row">
         <label for="lookupHo">호</label>
         <input type="text" id="lookupHo" inputmode="numeric" placeholder="예: 1201" maxlength="5" required />
+      </div>
+      <div class="form-row">
+        <label for="lookupName">계약자 성명</label>
+        <input type="text" id="lookupName" placeholder="홍길동" required />
       </div>
       <div class="form-row">
         <label for="lookupPhone4">휴대폰 뒷자리 4자리</label>
@@ -128,6 +104,10 @@
           <input type="text" id="resHo" inputmode="numeric" placeholder="예: 1201" maxlength="5" required />
         </div>
         <div class="form-row">
+          <label for="resName">계약자 성명</label>
+          <input type="text" id="resName" placeholder="홍길동" required />
+        </div>
+        <div class="form-row">
           <label for="resPhone4">휴대폰 뒷자리 4자리</label>
           <input type="text" id="resPhone4" inputmode="numeric" placeholder="0000" maxlength="4" required />
         </div>
@@ -149,11 +129,7 @@
         <h3>4. 예약자 정보</h3>
         <p class="selected-label">선택하신 일시: <strong id="selectedDateTimeLabel"></strong></p>
         <div class="form-row">
-          <label for="resName">계약자(방문자) 성명 *</label>
-          <input type="text" id="resName" required />
-        </div>
-        <div class="form-row">
-          <label for="resPhoneFull">연락처 *</label>
+          <label for="resPhoneFull">연락처(전체 번호) *</label>
           <input type="tel" id="resPhoneFull" inputmode="numeric" placeholder="01012345678" required />
         </div>
         <button type="submit" id="reserveSubmitBtn" class="btn primary block">예약 확정하기</button>
@@ -165,7 +141,7 @@
   <!-- ============ 예약조회/취소 탭 ============ -->
   <section id="tab-mypage" class="tab-panel">
     <h2 class="project-title">예약조회 · 취소</h2>
-    <p class="section-desc">동, 호수와 휴대폰번호 뒷자리 4자리로 예약 내역을 조회하고 취소할 수 있습니다.</p>
+    <p class="section-desc">동, 호, 계약자 성명과 휴대폰번호 뒷자리 4자리로 예약 내역을 조회하고 취소할 수 있습니다.</p>
 
     <form id="myResForm" class="card form-card">
       <div class="form-row">
@@ -175,6 +151,10 @@
       <div class="form-row">
         <label for="myHo">호</label>
         <input type="text" id="myHo" inputmode="numeric" maxlength="5" required />
+      </div>
+      <div class="form-row">
+        <label for="myName">계약자 성명</label>
+        <input type="text" id="myName" placeholder="홍길동" required />
       </div>
       <div class="form-row">
         <label for="myPhone4">휴대폰 뒷자리 4자리</label>
