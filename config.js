@@ -10,7 +10,7 @@
       (index.html과 같은 폴더에 PDF 파일을 함께 올려야 합니다)
    ========================================================= */
 
-const GAS_API_URL = "https://script.google.com/macros/s/AKfycbywgNLo67sL2hATIbySiI5Pm03XtdkqJ7d81J_L1np2JE7d_lDxbo7Ap7cyIe_w57RC_w/exec";
+const GAS_API_URL = "여기에_배포된_Apps_Script_웹앱_URL을_붙여넣으세요";
 
 // 안내문 PDF 파일 경로 (같은 폴더에 이 이름으로 PDF를 올려주세요)
 const NOTICE_PDF_URL = "안내문.pdf";
@@ -29,9 +29,11 @@ const SITE_INFO = {
   noticeDate: "2026년 8월 25일"
 };
 
-// 방문 예약 가능 일자 (YYYY-MM-DD), 안내문의 9.12(토) 제외 반영
+// 방문 예약 가능 일자 (YYYY-MM-DD), 안내문 원문 "9.7(월)~18(금), 12일 제외" 반영
+// (9.12만 제외이며 9.13(일)은 방문 가능일에 포함됨 - 주말 전체를 빼는 게 아님)
 const VISIT_DATES = [
   "2026-09-07", "2026-09-08", "2026-09-09", "2026-09-10", "2026-09-11",
+  "2026-09-13",
   "2026-09-14", "2026-09-15", "2026-09-16", "2026-09-17", "2026-09-18"
 ];
 
